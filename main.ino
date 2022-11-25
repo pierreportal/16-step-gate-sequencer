@@ -59,4 +59,8 @@ void loop() {
   
   trellis.read();
   delay(20); // resolution of around 60hz
+  setSequence(0);
+  if(play){
+    runSequence(0, play);
+  }
 }

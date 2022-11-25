@@ -34,6 +34,7 @@ void triggerPad(keyEvent evt) {
     keyPressInModeA(evt);
   }
   Serial.println(padIndex);
+  toggleKey(padIndex, 0);
   trellis.pixels.setPixelColor(padIndex, rainbowColorIndex(evt)); //on rising
 }
 
