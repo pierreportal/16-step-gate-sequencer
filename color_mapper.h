@@ -14,3 +14,7 @@ uint32_t Wheel(byte WheelPos) {
   }
   return 0;
 }
+
+uint32_t rainbowColorIndex(keyEvent evt) {
+  return Wheel(map(evt.bit.NUM, 0, trellis.pixels.numPixels(), 0, 255));
+}

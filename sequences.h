@@ -1,3 +1,5 @@
+int selectedSequence = 0;
+
 bool sequences[4][16] = {
   {
     false, true, false, false,
@@ -25,7 +27,7 @@ bool sequences[4][16] = {
   }
 };
 
-void setSequence(int sequenceIndex){
+void displaySequence(int sequenceIndex){
   for(int i=0; i < 16; i++){
     if(sequences[sequenceIndex][i]){
       trellis.pixels.setPixelColor(i, COLOR_PURPLE);
@@ -36,6 +38,17 @@ void setSequence(int sequenceIndex){
 
 int index = 0;
 
+void resetKeyIndex(){
+  index = 0;
+}
+
+bool play = false;
+
+void playPause(){
+  resetKeyIndex();
+  play = not play;
+}
+
 void runSequence(int sequenceIndex, bool playing/*, int clockSignal*/){
   bool indexState = sequences[sequenceIndex][index];
   int c;
@@ -45,7 +58,7 @@ void runSequence(int sequenceIndex, bool playing/*, int clockSignal*/){
     c = COLOR_NONE;
   }
   
-  trellis.pixels.setPixelColor(index, COLOR_PURPLE);
+  trellis.pixels.setPixelColor(index, COLOR_BLUE);
   trellis.pixels.show();
   delay(50);
 
@@ -56,7 +69,6 @@ void runSequence(int sequenceIndex, bool playing/*, int clockSignal*/){
   index = (index + 1) % 16;
 }
 
-
-void toggleKey(int keyIndex, int sequenceIndex){
+void toggleSequenceKey(int keyIndex, int sequenceIndex){
   sequences[sequenceIndex][keyIndex] = not sequences[sequenceIndex][keyIndex];
 }
