@@ -24,12 +24,32 @@ TrellisCallback blink(keyEvent evt){
   return 0;
 }
 
+bool play = false;
+
+bool switcher = true;
+
 
 void setup() {
   init(blink);
 }
 
+
 void loop() {
+  
+  int playButtonValue = analogRead(PLAY_BUTTON_PIN);
+  
+  bool trigger = playButtonValue < 1000;
+  
+  if(trigger and switcher){
+    play = not play;
+    Serial.println(play);
+    switcher = false;
+  }
+
+  if(not trigger and not switcher) {
+    switcher = true;
+  }
+  
   trellis.read();
   delay(20); // resolution of around 60hz
 }

@@ -1,5 +1,7 @@
 void init(TrellisCallback cb) {
   Serial.begin(9600);
+
+  pinMode(PLAY_BUTTON_PIN, INPUT_PULLUP);
   
   if (!trellis.begin()) {
     Serial.println("Could not start trellis, check wiring?");
