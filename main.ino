@@ -24,31 +24,38 @@ TrellisCallback blink(keyEvent evt){
   return 0;
 }
 
-bool play = false;
+
 
 bool switcher = true;
+void switchButton(bool trigger, void (*callback)(void)){
+  
+  if(trigger and switcher){
+    switcher = false;
+    callback();
+  }
+  if(not trigger and not switcher){
+    switcher = true;
+  }
+}
+
+
+
+
+bool play = false;
 
 
 void setup() {
   init(blink);
 }
 
+void playPause(){
+  play = not play;
+  Serial.println(play);
+}
 
 void loop() {
-  
-  int playButtonValue = analogRead(PLAY_BUTTON_PIN);
-  
-  bool trigger = playButtonValue < 1000;
-  
-  if(trigger and switcher){
-    play = not play;
-    Serial.println(play);
-    switcher = false;
-  }
 
-  if(not trigger and not switcher) {
-    switcher = true;
-  }
+  switchButton(analogRead(PLAY_BUTTON_PIN) < 1000, playPause);
   
   trellis.read();
   delay(20); // resolution of around 60hz
