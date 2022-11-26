@@ -31,6 +31,8 @@ void displaySequence(int sequenceIndex){
   for(int i=0; i < 16; i++){
     if(sequences[sequenceIndex][i]){
       trellis.pixels.setPixelColor(i, COLOR_PURPLE);
+    } else {
+      trellis.pixels.setPixelColor(i, COLOR_NONE);
     }
   }
   trellis.pixels.show();
