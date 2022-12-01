@@ -3,6 +3,9 @@ bool B_modePadActive = false;
 bool C_modePadActive = false; // select sequence
 bool D_modePadActive = false; 
 
+int pressedKey;
+int releasedKey;
+
 bool detectKeyPress(keyEvent evt) {
   return evt.bit.EDGE == SEESAW_KEYPAD_EDGE_RISING;
 }
@@ -15,13 +18,13 @@ void turnOffPadLight(keyEvent evt) {
   trellis.pixels.setPixelColor(evt.bit.NUM, COLOR_NONE);
 }
 
-void triggerSpecialTriggerKeys(int keyIndex){
-  if(keyIndex == MODE_PAD_C_INDEX) {
-    toggleSequenceKey(MODE_PAD_C_INDEX, selectedSequence);
+void triggerSpecialTriggerKeys(int padIndex){
+  if(pressedKey == MODE_PAD_C_INDEX) {
+    //toggleSequenceKey(MODE_PAD_C_INDEX, selectedSequence);
     C_modePadActive = true;
-  }
-  if(keyIndex == MODE_PAD_D_INDEX) {
-    D_modePadActive = true;
+  
+  } else {
+    pressedKey = padIndex;
   }
 }
 
@@ -50,12 +53,6 @@ void triggerPad(keyEvent evt) {
   triggerSpecialTriggerKeys(padIndex);
   
   if(C_modePadActive) {
-    keyPressInModeC(padIndex);
-  } else {
-    toggleSequenceKey(padIndex, selectedSequence);
-  }
-  
-  if(C_modePadActive) {
     trellis.pixels.setPixelColor(padIndex, COLOR_MODE_KEY); //on rising
   } else {
     trellis.pixels.setPixelColor(padIndex, COLOR_PINK); //on rising    
@@ -63,14 +60,27 @@ void triggerPad(keyEvent evt) {
 }
 
 void releasePad(keyEvent evt) {
+  int padIndex = evt.bit.NUM;
+  releasedKey = padIndex;
+  
+  if(C_modePadActive) {
+    keyPressInModeC(padIndex);
+  } else {
+    toggleSequenceKey(padIndex, selectedSequence);
+  }
+
   turnOffPadLight(evt);
   releaseSpecialTriggerKeys(evt.bit.NUM);
 }
 
 TrellisCallback blink(keyEvent evt){
-  if (detectKeyPress(evt)) { 
+  if (detectKeyPress(evt)) {
+    
     triggerPad(evt);
+
   } else if (detectKeyReleased(evt)) {
+  
+
     releasePad(evt);
   }
   trellis.pixels.show();

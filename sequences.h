@@ -28,9 +28,11 @@ bool sequences[4][16] = {
 };
 
 void displaySequence(int sequenceIndex){
+  int c;
+  
   for(int i=0; i < 16; i++){
     if(sequences[sequenceIndex][i]){
-      trellis.pixels.setPixelColor(i, COLOR_PURPLE);
+      trellis.pixels.setPixelColor(i, Wheel(map(sequenceIndex, 0, 4, 0, 255)));
     } else {
       trellis.pixels.setPixelColor(i, COLOR_NONE);
     }
@@ -44,6 +46,10 @@ void resetKeyIndex(){
   index = 0;
 }
 
+void moveSequenceIndex(){
+  index = (index + 1) % 16;
+}
+
 bool play = false;
 
 void playPause(){
@@ -51,24 +57,41 @@ void playPause(){
   play = not play;
 }
 
-void runSequence(int sequenceIndex, bool playing/*, int clockSignal*/){
-  bool indexState = sequences[sequenceIndex][index];
-  int c;
-  if(indexState){
-    c = COLOR_PURPLE;
-  } else {
-    c = COLOR_NONE;
+void sendSignal(int voiceIndex){
+  if(voiceIndex == 0){
+    blinkLed(VOICE_A_PIN, 0);
+  }
+  if(voiceIndex == 1){
+    blinkLed(VOICE_B_PIN, 0);
+  }
+  if(voiceIndex == 2){
+    blinkLed(VOICE_C_PIN, 0);
+  }
+  if(voiceIndex == 3){
+    blinkLed(VOICE_D_PIN, 0);
+  }
+}
+
+void runSequence(int keyIndex, bool playing/*, int clockSignal*/){
+  int indexColor;
+  for(int i=0; i < 4; i++) {
+    bool indexState = sequences[i][keyIndex];
+
+    
+    
+    if(indexState){
+      indexColor = COLOR_PURPLE;
+      sendSignal(i);
+    } else {
+      indexColor = 0xffffff;
+    }
+      
   }
   
-  trellis.pixels.setPixelColor(index, COLOR_BLUE);
+  
+  
+  trellis.pixels.setPixelColor(keyIndex, indexColor);
   trellis.pixels.show();
-  delay(50);
-
-  trellis.pixels.setPixelColor(index, c);
-  trellis.pixels.show();
-  delay(50);
-    
-  index = (index + 1) % 16;
 }
 
 void toggleSequenceKey(int keyIndex, int sequenceIndex){

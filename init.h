@@ -19,5 +19,10 @@ void initTrellis() {
 
 void initAnalogPins(){
   pinMode(PLAY_BUTTON_PIN, INPUT_PULLUP);
-  pinMode(CLOCK_INPUT_PIN, INPUT);
+  pinMode(CLOCK_INPUT_PIN, INPUT_PULLUP);
+  pinMode(CLOCK_LED_PIN, OUTPUT);
+  pinMode(VOICE_A_PIN, OUTPUT);
+  pinMode(VOICE_B_PIN, OUTPUT);
+  pinMode(VOICE_C_PIN, OUTPUT);
+  pinMode(VOICE_D_PIN, OUTPUT);
 }
